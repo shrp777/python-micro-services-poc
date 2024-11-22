@@ -1,6 +1,6 @@
 # Architecture à base de micro services Python
 
-Preuve de concept
+Preuve de concept (work in progress)
 
 --
 
