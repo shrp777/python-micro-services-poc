@@ -57,9 +57,9 @@ services:
       context: ./auth-service
     develop:
       watch:
-        - action: sync
+        - action: rebuild
           path: ./auth
-          target: /
+          target: /code
     ports:
       - 9000:80
     networks:
