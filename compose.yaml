@@ -1,0 +1,104 @@
+services:
+  gateway-service:
+    build:
+      context: ./gateway-service
+    develop:
+      watch:
+        - action: rebuild
+          path: ./gateway-service
+          target: /code
+    ports:
+      - 7001:80
+    networks:
+      - shrp
+    depends_on:
+      tasks-db:
+        condition: service_healthy
+
+  tasks-service:
+    build:
+      context: ./tasks-service
+    develop:
+      watch:
+        - action: rebuild
+          path: ./tasks-service
+          target: /code
+    ports:
+      - 8000:80
+    networks:
+      - shrp
+    depends_on:
+      tasks-db:
+        condition: service_healthy
+
+  tasks-db:
+    image: postgres
+    #restart: always
+    user: postgres
+    secrets:
+      - tasks-db-password
+    # volumes:
+    #   - tasks-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=tasks-db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/tasks-db-password
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shrp
+
+  auth-service:
+    build:
+      context: ./auth-service
+    develop:
+      watch:
+        - action: sync
+          path: ./auth
+          target: /
+    ports:
+      - 9000:80
+    networks:
+      - shrp
+    depends_on:
+      auth-db:
+        condition: service_healthy
+
+  auth-db:
+    image: postgres
+    #restart: always
+    user: postgres
+    secrets:
+      - auth-db-password
+    # volumes:
+    #   - auth-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=auth-db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/auth-db-password
+    expose:
+      - 5432
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shrp
+
+# volumes:
+#   tasks-db-data:
+#   auth-db-data:
+
+secrets:
+  tasks-db-password:
+    file: db/tasks-db-password.txt
+  auth-db-password:
+    file: db/auth-db-password.txt
+
+networks:
+  shrp:
+    driver: bridge
