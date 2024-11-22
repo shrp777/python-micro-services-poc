@@ -48,7 +48,7 @@ docker compose up --build
 docker compose up --build --watch
 ```
 
-### Suppression des container
+### Suppression des containers
 
 ```sh
 docker compose down
