@@ -13,8 +13,14 @@ TODO:
 
 ## Instructions pour l'installation (avant le lancement des services Docker)
 
-- créer les fichiers .txt dans le dossier ./db en se basant sur les fichiers .example.txt
-- chaque fichier doit être nommé sans la mention "example", auth-db-password.example.txt devient auth-db-password.txt
+- créer les fichiers de variables d'environnement en se basant sur les fichiers modèles nommés .env.example :
+
+- ./gateway-service/.env
+- ./auth-service/.env
+- ./auth-db/.env
+- ./tasks-service/.env
+- ./tasks-db/.env
+- ./rabbitmq/.env
 
 ## Lancement des services Docker
 
@@ -40,6 +46,12 @@ docker compose up --build
 
 ```sh
 docker compose up --build --watch
+```
+
+### Suppression des container
+
+```sh
+docker compose down
 ```
 
 --

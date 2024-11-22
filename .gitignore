@@ -1,2 +1,3 @@
-db/*db-password.txt
 .env
+data
+log

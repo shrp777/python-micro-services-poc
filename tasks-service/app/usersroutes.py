@@ -20,12 +20,12 @@ class User(BaseModel):
 fake_db: List[User] = []
 
 
-@router.get("/users", response_model=List[User])
+@router.get("/", response_model=List[User])
 def get_users():
     return fake_db
 
 
-@router.get("/users/{user_id}", response_model=User)
+@router.get("/{user_id}", response_model=User)
 def get_user(user_id: UUID):
     for user in fake_db:
         if user.id == user_id:
@@ -33,13 +33,13 @@ def get_user(user_id: UUID):
     raise HTTPException(status_code=404, detail="user does not exist")
 
 
-@router.post("/users", response_model=User)
+@router.post("/", response_model=User)
 def create_user(user: User):
     fake_db.append(user)
     return user
 
 
-@router.put("/users/{user_id}", response_model=User)
+@router.put("/{user_id}", response_model=User)
 def update_user(user_id: UUID, updated_user: User):
     for id, user in enumerate(fake_db):
         if user.id == user_id:
@@ -48,7 +48,7 @@ def update_user(user_id: UUID, updated_user: User):
     raise HTTPException(status_code=404, detail="user does not exist")
 
 
-@router.delete("/users/{user_id}", response_model=dict)
+@router.delete("/{user_id}", response_model=dict)
 def delete_user(user_id: UUID):
     for id, user in enumerate(fake_db):
         if user.id == user_id:

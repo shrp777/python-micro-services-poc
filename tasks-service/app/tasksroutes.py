@@ -1,10 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from typing import List
 from datetime import datetime, time, timedelta
 from typing import Annotated
 from uuid import UUID
 from fastapi import APIRouter
+
 
 router = APIRouter()
 
@@ -21,36 +22,36 @@ class Task(BaseModel):
 fake_db: List[Task] = []
 
 
-@router.get("/tasks", response_model=List[Task])
-def get_articles():
+@router.get("/", response_model=List[Task])
+def get_tasks():
     return fake_db
 
 
-@router.get("/tasks/{task_id}", response_model=Task)
-def get_article(task_id: UUID):
+@router.get("/{task_id}", response_model=Task)
+def get_task(task_id: UUID):
     for task in fake_db:
         if task.id == task_id:
             return task
     raise HTTPException(status_code=404, detail="Task doest not exist")
 
 
-@router.post("/tasks", response_model=Task)
-def create_article(task: Task):
+@router.post("/", response_model=Task)
+def create_task(task: Task):
     fake_db.append(task)
     return task
 
 
-@router.put("/tasks/{task_id}", response_model=Task)
-def update_article(task_id: UUID, updated_article: Task):
+@router.put("/{task_id}", response_model=Task)
+def update_task(task_id: UUID, updated_task: Task):
     for id, task in enumerate(fake_db):
         if task.id == task_id:
-            fake_db[id] = updated_article
-            return updated_article
+            fake_db[id] = updated_task
+            return updated_task
     raise HTTPException(status_code=404, detail="Task doest not exist")
 
 
-@router.delete("/tasks/{task_id}", response_model=dict)
-def delete_article(task_id: UUID):
+@router.delete("/{task_id}", response_model=dict)
+def delete_task(task_id: UUID):
     for id, task in enumerate(fake_db):
         if task.id == task_id:
             del fake_db[id]
