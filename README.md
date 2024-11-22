@@ -1,4 +1,4 @@
-# Architecture à base de micro services Python
+# Architecture Micro Services modèle - Python (FastAPI) + Docker (PoC)
 
 🚨🚨🚨 Preuve de concept (work in progress) 🚨🚨🚨
 
